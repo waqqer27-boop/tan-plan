@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>План загара • Май–Сентябрь</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4efe9;
+  margin: 0;
+  padding: 20px;
+}
+h1 {
+  text-align: center;
+}
+.month {
+  margin-bottom: 40px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+}
+.day {
+  display: grid;
+  grid-template-columns: 60px repeat(6, 1fr);
+  gap: 5px;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+.day:last-child {
+  border-bottom: none;
+}
+label {
+  text-align: center;
+}
+input[type="checkbox"] {
+  transform: scale(1.2);
+}
+.header {
+  font-weight: bold;
+  background: #ddd;
+}
+</style>
+</head>
+<body>
+
+<h1>🌞 План загара (Май – Сентябрь)</h1>
+<p style="text-align:center">Отмечай каждый день и следи за прогрессом</p>
+
+<div id="app"></div>
+
+<script>
+const months = [
+  { name: "Май", days: 31 },
+  { name: "Июнь", days: 30 },
+  { name: "Июль", days: 31 },
+  { name: "Август", days: 31 },
+  { name: "Сентябрь", days: 30 }
+];
+
+const app = document.getElementById("app");
+
+months.forEach((month, mIndex) => {
+  const div = document.createElement("div");
+  div.className = "month";
+  div.innerHTML = `<h2>${month.name}</h2>
+    <div class="day header">
+      <div>День</div>
+      <div>Трен</div>
+      <div>Загар</div>
+      <div>SPF</div>
+      <div>AfterSun</div>
+      <div>Вода</div>
+      <div>Еда</div>
+    </div>`;
+  
+  for (let d = 1; d <= month.days; d++) {
+    const keyBase = `${mIndex}-${d}`;
+    const day = document.createElement("div");
+    day.className = "day";
+    day.innerHTML = `
+      <div>${d}</div>
+      ${["train","sun","spf","after","water","food"].map(type =>
+        `<label>
+          <input type="checkbox" id="${keyBase}-${type}">
+        </label>`
+      ).join("")}
+    `;
+    div.appendChild(day);
+  }
+  app.appendChild(div);
+});
+
+// сохранение состояния
+document.querySelectorAll("input[type=checkbox]").forEach(cb => {
+  const saved = localStorage.getItem(cb.id);
+  if (saved === "true") cb.checked = true;
+
+  cb.addEventListener("change", () => {
+    localStorage.setItem(cb.id, cb.checked);
+  });
+});
+</script>
+
+</body>
+</html>
